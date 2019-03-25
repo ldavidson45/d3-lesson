@@ -50,3 +50,6 @@ const svg = d3
   .select("svg")
   .attr("width", 200)
   .attr("height", 300);
+
+const barPadding = 5;
+const barWidth = 200 / dataSet.length;
