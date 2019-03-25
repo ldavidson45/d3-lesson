@@ -54,6 +54,17 @@ const svg = d3
 const barPadding = 5;
 const barWidth = 200 / dataSet.length;
 
+// scale your chart to fit the data better
+
+const endorsementsArray = dataSet.map(item => {
+  return item.endorsementsCount;
+});
+
+const yScale = d3
+  .scaleLinear()
+  .domain([0, d3.max(endorsementsArray)])
+  .range([0, 300]);
+
 // create bar chart by appending svg shapes into the element. Define the placement and attributes for each data item
 const barChart = svg
   .selectAll("rect")
