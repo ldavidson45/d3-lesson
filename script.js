@@ -44,3 +44,9 @@ var dataSet = [
     endorsementsCount: 1
   }
 ];
+
+// select your svg element from the dom and add size attributes to define height and width
+const svg = d3
+  .select("svg")
+  .attr("width", 200)
+  .attr("height", 300);
