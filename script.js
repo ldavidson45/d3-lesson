@@ -72,10 +72,10 @@ const barChart = svg
   .enter()
   .append("rect")
   .attr("y", d => {
-    return 300 - d.endorsementsCount;
+    return 300 - yScale(d.endorsementsCount);
   })
   .attr("height", d => {
-    return d.endorsementsCount;
+    return yScale(d.endorsementsCount);
   })
   .attr("width", barWidth - barPadding)
   .attr("transform", (d, i) => {
