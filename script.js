@@ -46,13 +46,16 @@ var dataSet = [
 ];
 
 // select your svg element from the dom and add size attributes to define height and width
+
+const height = 300;
+const width = 600;
+const barPadding = 5;
+const barWidth = width / dataSet.length;
+
 const svg = d3
   .select("svg")
-  .attr("width", 200)
-  .attr("height", 300);
-
-const barPadding = 5;
-const barWidth = 200 / dataSet.length;
+  .attr("width", width)
+  .attr("height", height);
 
 // scale your chart to fit the data better
 
@@ -63,7 +66,7 @@ const endorsementsArray = dataSet.map(item => {
 const yScale = d3
   .scaleLinear()
   .domain([0, d3.max(endorsementsArray)])
-  .range([0, 300]);
+  .range([0, height]);
 
 // create bar chart by appending svg shapes into the element. Define the placement and attributes for each data item
 const barChart = svg
@@ -72,7 +75,7 @@ const barChart = svg
   .enter()
   .append("rect")
   .attr("y", d => {
-    return 300 - yScale(d.endorsementsCount);
+    return height - yScale(d.endorsementsCount);
   })
   .attr("height", d => {
     return yScale(d.endorsementsCount);
@@ -81,4 +84,21 @@ const barChart = svg
   .attr("transform", (d, i) => {
     var translate = [barWidth * i, 0];
     return `translate(${translate})`;
+  });
+
+//   add text labels to each bar
+
+const text = svg
+  .selectAll("text")
+  .data(dataSet)
+  .enter()
+  .append("text")
+  .text(d => {
+    return d.candidate;
+  })
+  .attr("y", (d, i) => {
+    return height - yScale(d.endorsementsCount);
+  })
+  .attr("x", (d, i) => {
+    return barWidth * i;
   });
