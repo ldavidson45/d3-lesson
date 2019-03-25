@@ -8,84 +8,101 @@ WHile there are many data visualization tools out there, D3 is a great choice fo
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+First, create a new project folder with an index.html. I've also added a script.js file and imported it for organization purposes.
 
-### Prerequisites
-
-What things you need to install the software and how to install them
+In your index.html, add the following script tag in your head:
 
 ```
-Give examples
+    <script src="https://d3js.org/d3.v5.min.js"></script>
 ```
 
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
+Because D3 is an open source JavaScript library, we do not have to install it, we can just include the script tag. You can install it with:
 
 ```
-Give the example
+npm install d3
 ```
 
-And repeat
+Additional documentation for setup:
+
+https://github.com/d3/d3/wiki#supported-environments
+
+## Using D3
+
+After you've set up your index.html, you can test out how D3 can modify dom elements. Try this:
+
+1. Add this to your html file:
 
 ```
-until finished
+<h1>Hello World</h1>
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
+2. Select and update the text by adding this to your .js file:
 
 ```
-Give an example
+d3.select('h1').style("color", "red")
 ```
 
-### And coding style tests
+## Incorporate Data
 
-Explain what these tests test and why
+In this example, I hardcoded presidential candidate endorsement data from [FiveThirtyEight](https://projects.fivethirtyeight.com/2020-endorsements/democratic-primary/ "data source") straight into my script.js file.
+
+## Add An SVG
+
+In your html file, add an empty svg element:
 
 ```
-Give an example
+<svg> </svg>
 ```
 
-## Deployment
+Use D3 to select the svg element and set its height and width. We are going to make a simple bar chart, so you will also want to define the bar width and padding as well.
 
-Add additional notes about how to deploy this on a live system
+```
+const height = 500;
+const width = 800;
+const barPadding = 5;
+const barWidth = width / dataSet.length;
 
-## Built With
+const svg = d3
+  .select("svg")
+  .attr("width", width)
+  .attr("height", height);
+```
 
-- [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-- [Maven](https://maven.apache.org/) - Dependency Management
-- [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+To render your bar chart, add the following:
 
-## Contributing
+```
+const barChart = svg
+  .selectAll("rect")
+  .data(dataSet)
+  .enter()
+  .append("rect")
+  .attr("y", d => {
+    return height - yScale(d.endorsementsCount);
+  })
+  .attr("height", d => {
+    return yScale(d.endorsementsCount);
+  })
+  .attr("width", barWidth - barPadding)
+  .attr("transform", (d, i) => {
+    var translate = [barWidth * i, 0];
+    return `translate(${translate})`;
+  });
+```
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+Explained in steps:
 
-## Versioning
+1. Select all rectangles in your svg (there aren't any right now)
+2. Bind the data set you defined in your .js file to the chart.
+3. The enter() method will take each data item and perform the following actions on each one
+4. Append a rectangle for the bar
+5. set the y-position (I've defined a yScale to fit the chart to my data)
+6. Set the height
+7. Set the width
+8. Translate the bars so that they are spaced out properly
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
+This is how you render elements that are connected to data points using D3!
 
-## Authors
+## Additional Resources
 
-- **Billie Thompson** - _Initial work_ - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-- Hat tip to anyone whose code was used
-- Inspiration
-- etc
+- [Let's learn D3.js - D3 for data visualization (YouTube)](https://www.youtube.com/watch?v=C4t6qfHZ6Tw "D3 tutorial for beginners")
+- [SVG text element (Jenkov.com)](http://tutorials.jenkov.com/svg/text-element.html "how to style svg text elements")

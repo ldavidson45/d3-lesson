@@ -47,8 +47,8 @@ var dataSet = [
 
 // select your svg element from the dom and add size attributes to define height and width
 
-const height = 300;
-const width = 600;
+const height = 500;
+const width = 800;
 const barPadding = 5;
 const barWidth = width / dataSet.length;
 
@@ -65,7 +65,7 @@ const endorsementsArray = dataSet.map(item => {
 
 const yScale = d3
   .scaleLinear()
-  .domain([0, d3.max(endorsementsArray)])
+  .domain([0, d3.max(endorsementsArray) + 10])
   .range([0, height]);
 
 // create bar chart by appending svg shapes into the element. Define the placement and attributes for each data item
@@ -94,11 +94,16 @@ const text = svg
   .enter()
   .append("text")
   .text(d => {
-    return d.candidate;
+    return d.candidate + " :" + d.endorsementsCount;
   })
   .attr("y", (d, i) => {
     return height - yScale(d.endorsementsCount);
   })
   .attr("x", (d, i) => {
-    return barWidth * i;
+    return barWidth * i + barWidth / 2;
   });
+
+d3.selectAll("text")
+  .attr("fill", "white")
+  .attr("font-size", "20")
+  .style("writing-mode", "tb");
